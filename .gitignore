@@ -1,0 +1,20 @@
+# Directories
+__pycache__/
+.cache/
+dist/
+build/
+*.egg-info/
+
+# Files
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info
+*.db
+*.sqlite3
+*.pyc
+*.DS_Store
+*.idea/
+*.vscode/
