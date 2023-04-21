@@ -53,7 +53,7 @@ def verify_signature(auth: HTTPAuthorizationCredentials = Depends(HTTPBearer()))
 
 
 @app.get("/secure")
-async def secure_route(token: str = Depends(verify_signature)):
+async def secure_route(token: Annotated[str, Depends(verify_signature)]):
     return {"message": "Secure route accessed", "token": token}
 
 
