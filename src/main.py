@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Depends, Request, Header, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from nacl.signing import VerifyKey, SignedMessage
 from nacl.exceptions import BadSignatureError
@@ -47,14 +47,52 @@ def verify_signature(auth: HTTPAuthorizationCredentials = Depends(HTTPBearer()))
 
     except (ValueError, BadSignatureError):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            # status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=404,
             detail="Invalid authentication credentials",
         )    
 
 
+def verify_header(authorization: HTTPAuthorizationCredentials = Depends(HTTPBearer())):
+    try:
+        # Decode the public key and message from the token
+        print(authorization.credentials)
+        public_key_b64, signed_message_b64, signed_signature_b64 = authorization.credentials.split(".")
+
+        # Decode the base64 encoded public key and signed message
+        public_key_bytes = base64.urlsafe_b64decode(public_key_b64)
+        signed_message = base64.urlsafe_b64decode(signed_message_b64)
+        signed_signature = base64.urlsafe_b64decode(signed_signature_b64)
+
+        print(public_key_bytes)
+        print(signed_message)
+        # Create a VerifyKey object using the public key bytes
+        verify_key = VerifyKey(public_key_bytes)
+        print('vk')
+        print(verify_key)
+
+        # Verify the message and return the original message
+        message = verify_key.verify(signed_message, signed_signature)
+
+        print('hoooo')
+        return message.decode()
+
+    except (ValueError, BadSignatureError):
+        raise HTTPException(
+            # status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=401,
+            detail="Invalid authentication credentials",
+        )    
+
 @app.get("/secure")
 async def secure_route(token: Annotated[str, Depends(verify_signature)]):
+    print(token)
     return {"message": "Secure route accessed", "token": token}
+
+
+@app.get("/secure_header", dependencies=[Depends(verify_header)])
+async def secure_route():
+    return {"message": "Secure header accessed", "token": "token_placeholder"}
 
 
 
