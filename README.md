@@ -6,10 +6,12 @@ This repo provides references for a few simple flows
     1. Sign a message with your solana keys client side 
     2. Add the message into the body of an API request
     3. Verify the signature 
+https://github.com/Tamgros/solana-as-api/blob/7b92f1756aea0d15433fa94d3d7705d53323fe03/make_signed_requests.py#L37-L41
+
 2. Header Sig
     1. Same as body signature, except the authorization token is within the headers - "Authorization: bearer \<token\>"
 
-https://github.com/Tamgros/solana-as-api/blob/1ec3e438774cdf3f7bf2558b2a975cf8b0dae098/make_signed_header.py#L40
+https://github.com/Tamgros/solana-as-api/blob/7b92f1756aea0d15433fa94d3d7705d53323fe03/make_signed_header.py#L40-L43
 
 3. Oauth type flow (pictured below)
     1. Send tx to Solana
