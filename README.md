@@ -8,6 +8,9 @@ This repo provides references for a few simple flows
     3. Verify the signature 
 2. Header Sig
     1. Same as body signature, except the authorization token is within the headers - "Authorization: bearer \<token\>"
+
+https://github.com/Tamgros/solana-as-api/blob/1ec3e438774cdf3f7bf2558b2a975cf8b0dae098/make_signed_header.py#L40
+
 3. Oauth type flow (pictured below)
     1. Send tx to Solana
         * this could include a value transfer
