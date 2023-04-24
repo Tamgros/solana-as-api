@@ -2,7 +2,7 @@
 
 https://developer.token.io/seasons_rest_api_doc/content/e-rest/jwt_auth.htm
 
-![alt text](https://github.com/tamgros/solana-as-api/assets/1_WP1iB-f6lJl_4YsvTsw2Og.png?raw=true)
+![alt text](https://github.com/Tamgros/solana-as-api/blob/solana_package/assets/1_WP1iB-f6lJl_4YsvTsw2Og.png)
 
 
 Get all NFTs from a wallet
