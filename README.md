@@ -34,3 +34,9 @@ https://solanacookbook.com/references/nfts.html#candy-machine-v1
 solana-keygen new --outfile ~/.config/solana/burner3.json
 
 https://developer.token.io/seasons_rest_api_doc/content/e-rest/jwt_auth.htm
+
+Next steps, TODOs:
+* JWT type format
+* token gating flow
+* Token tx flow
+* Utilize the usage field of NFTs for access rights
