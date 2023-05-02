@@ -22,7 +22,8 @@ import asyncio
 load_dotenv()
 
 RPC_CLIENT = os.getenv('RPC_CLIENT')
-KEPAIR_PATH = os.getenv('KEYPAIR_PATH')
+KEYPAIR_PATH = os.getenv('KEYPAIR_PATH')
+
 
 with open(KEYPAIR_PATH, "r") as json_file:
     sender_json = json.load(json_file)
@@ -31,16 +32,24 @@ with open(KEYPAIR_PATH, "r") as json_file:
 
 
 with open('/Users/mattsorg/.config/solana/burner3.json', "r") as json_file:
-    reciever_json = json.load(json_file)
-    reciever_private_bytes = bytes(reciever_json)
-    reciever = Keypair.from_bytes(reciever_private_bytes)
+    receiver_json = json.load(json_file)
+    receiver_private_bytes = bytes(receiver_json)
+    receiver = Keypair.from_bytes(receiver_private_bytes)
 
 
 
+LAMPORT_PER_SOL = 1000000000
+
+client: Client = Client(RPC_CLIENT)
 
 
+transaction = Transaction().add(transfer(TransferParams(
+    from_pubkey=sender.pubkey(),
+    to_pubkey=receiver.pubkey(),
+    lamports=1_000_000)
+))
 
-
+tx = client.send_transaction(transaction, sender)
 
 
 async def main():
