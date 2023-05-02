@@ -42,3 +42,4 @@ Next steps, TODOs:
     * AMM?
 * Token tx flow
 * Utilize the usage field of NFTs for access rights
+* Sync with Tiago on the octane type relayer flow for DeFi
