@@ -38,5 +38,7 @@ https://developer.token.io/seasons_rest_api_doc/content/e-rest/jwt_auth.htm
 Next steps, TODOs:
 * JWT type format
 * token gating flow
+    * Some tokens represent different rate limits. How do you queue if there is ever a capacity reached?
+    * AMM?
 * Token tx flow
 * Utilize the usage field of NFTs for access rights
