@@ -8,21 +8,11 @@ import uvicorn
 import base64
 import json
 
+from src.models.solana_sign_in_input import SolanaSignInInput
+
 app = FastAPI()
 
-class SolanaSignInInput(BaseModel):
-    domain: str
-    account: Optional[str]
-    statement: Optional[str]
-    uri: str
-    version: str = "1"
-    chain: str
-    nonce: str
-    issuedAt: str
-    expirationTime: Optional[str]
-    notBefore: Optional[str]
-    requestId: Optional[str]
-    resources: Optional[List[str]]
+
 
 
 class Creds(BaseModel):
