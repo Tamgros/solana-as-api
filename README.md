@@ -36,6 +36,8 @@ solana-keygen new --outfile ~/.config/solana/burner3.json
 https://developer.token.io/seasons_rest_api_doc/content/e-rest/jwt_auth.htm
 
 Next steps, TODOs:
+* Sign in with Solana
+    * https://github.com/solana-labs/wallet-standard/pull/12
 * JWT type format
 * token gating flow
     * Some tokens represent different rate limits. How do you queue if there is ever a capacity reached?
@@ -43,3 +45,4 @@ Next steps, TODOs:
 * Token tx flow
 * Utilize the usage field of NFTs for access rights
 * Sync with Tiago on the octane type relayer flow for DeFi
+
