@@ -2,13 +2,27 @@ from fastapi import FastAPI, Depends, Request, Header, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from nacl.signing import VerifyKey, SignedMessage
 from nacl.exceptions import BadSignatureError
-from typing import Annotated
+from typing import Annotated, List
 from pydantic import BaseModel
 import uvicorn
 import base64
 import json
 
 app = FastAPI()
+
+class SolanaSignInInput(BaseModel):
+    domain: str
+    account: Optional[str]
+    statement: Optional[str]
+    uri: str
+    version: str = "1"
+    chain: str
+    nonce: str
+    issuedAt: str
+    expirationTime: Optional[str]
+    notBefore: Optional[str]
+    requestId: Optional[str]
+    resources: Optional[List[str]]
 
 
 class Creds(BaseModel):
