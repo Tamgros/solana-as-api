@@ -1,3 +1,6 @@
+from pydantic import BaseModel
+from typing import List
+
 class SolanaSignInInput(BaseModel):
     domain: str
     account: Optional[str]

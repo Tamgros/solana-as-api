@@ -68,17 +68,12 @@ def verify_header(authorization: HTTPAuthorizationCredentials = Depends(HTTPBear
         signed_message = base64.urlsafe_b64decode(signed_message_b64)
         signed_signature = base64.urlsafe_b64decode(signed_signature_b64)
 
-        print(public_key_bytes)
-        print(signed_message)
         # Create a VerifyKey object using the public key bytes
         verify_key = VerifyKey(public_key_bytes)
-        print('vk')
-        print(verify_key)
 
         # Verify the message and return the original message
         message = verify_key.verify(signed_message, signed_signature)
 
-        print('hoooo')
         return message.decode()
 
     except (ValueError, BadSignatureError):
