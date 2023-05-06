@@ -83,6 +83,33 @@ def verify_header(authorization: HTTPAuthorizationCredentials = Depends(HTTPBear
             detail="Invalid authentication credentials",
         )    
 
+def sign_in_with_solana(authorization: HTTPAuthorizationCredentials = Depends(HTTPBearer())):
+    try:
+        # Decode the public key and message from the token
+        print(authorization.credentials)
+        public_key_b64, signed_message_b64, signed_signature_b64 = authorization.credentials.split(".")
+
+        # Decode the base64 encoded public key and signed message
+        public_key_bytes = base64.urlsafe_b64decode(public_key_b64)
+        signed_message = base64.urlsafe_b64decode(signed_message_b64)
+        signed_signature = base64.urlsafe_b64decode(signed_signature_b64)
+
+        # Create a VerifyKey object using the public key bytes
+        verify_key = VerifyKey(public_key_bytes)
+
+        # Verify the message and return the original message
+        message = verify_key.verify(signed_message, signed_signature)
+
+        return message.decode()
+
+    except (ValueError, BadSignatureError):
+        raise HTTPException(
+            # status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=401,
+            detail="Invalid authentication credentials",
+        )
+
+
 @app.get("/secure")
 async def secure_route(token: Annotated[str, Depends(verify_signature)]):
     print(token)
@@ -93,6 +120,12 @@ async def secure_route(token: Annotated[str, Depends(verify_signature)]):
 async def secure_route():
     return {"message": "Secure header accessed", "token": "token_placeholder"}
 
+
+@app.get("/sign-in-with-solana", dependencies=[Depends(sign_in_with_solana)])
+async def sign_in_with_solana(): 
+    # print(authorization)
+
+    return None
 
 
 # def poke(credentials: Annotated[Creds, Depends(verify_sig)]):
