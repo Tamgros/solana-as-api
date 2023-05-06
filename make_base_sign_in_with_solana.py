@@ -11,21 +11,22 @@ import base64
 
 from src.models.solana_sign_in_input import SolanaSignInInput
 
+import os
 import dotenv 
 
 
-load_dotenv()
+dotenv.load_dotenv()
 signing_key = SigningKey.generate()
 
 # Sign a message with the signing key
 
 sign_in_dict = {
-    "domain": os.environ("RPC_CLIENT"),
+    "domain": os.getenv("RPC_CLIENT"),
     # "account": Optional[str]
     "statement": "Attack at Dawn",
-    "uri": os.environ("CHAIN_ID"),
+    "uri": os.getenv('API_ENDPOINT'),
     # "version": str = "1"
-    "chain": "Solana",
+    "chain": os.getenv("CHAIN_ID"),
     "nonce": "1",
     "issuedAt": str(datetime.now()),
     "expirationTime": str(datetime.now() + timedelta(minutes = 10))
@@ -36,11 +37,12 @@ sign_in_dict = {
 }
 
 sign_in_with_solana_format = SolanaSignInInput(
-
+    **sign_in_dict
 )
 
-signed = signing_key.sign(b"Attack at Dawn")
-
+# signed = signing_key.sign(b"Attack at Dawn")
+b_signed = bytes(str(sign_in_dict), 'utf-8')
+signed = signing_key.sign(b_signed)
 
 # Encode byte data to a base64 string
 signed_str = base64.b64encode(signed).decode('utf-8')
@@ -62,10 +64,11 @@ json_string = json.dumps(json_data)
 
 
 
-url = 'http://localhost:3333/secure_header'
+url = os.getenv('API_ENDPOINT')
 headers = {
     'Content-Type': 'application/json',
-    'Authorization': f'bearer {verify_key_str}.{signed_message_str}.{signed_signature_str}'
+    'Authorization': f'bearer {verify_key_str}.{signed_message_str}.{signed_signature_str}',
+    'x-signature': f'{signed_message_str}'
 }
 response = requests.get(url, headers=headers)
 
