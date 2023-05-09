@@ -172,7 +172,7 @@ def sign_in_with_solana(
         assert sign_in_information['chain'] == os.getenv('CHAIN_ID'), "chain selection doesn't match"
 
         #TODO: Some sort of nonce storage to prevent replay
-        check_address_nonce(sign_in_information)
+        assert check_address_nonce(sign_in_information), "tx nonce already used"
 
         return  {
             "signature": message.decode(),
