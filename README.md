@@ -46,3 +46,18 @@ Next steps, TODOs:
 * Utilize the usage field of NFTs for access rights
 * Sync with Tiago on the octane type relayer flow for DeFi
 
+## to setup
+poetry install
+
+
+## to start server
+poetry run dev
+
+## To end process
+ps -ef|grep python
+or
+sudo lsof -i:3333
+
+
+pkill -9 <pid>
+kill -9 <pid>
