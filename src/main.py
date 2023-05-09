@@ -20,14 +20,16 @@ app = FastAPI()
 
 NONCES = {}
 
-def check_address_nonce(info):
-    if 'account' in info:
-        account = info['account']
+def check_address_nonce(solana_signin_input):
+    # takes in the SolanaSignIn dict and checks to make sure the nonce isn't duped
+    # if it isn't duped, add it to the dict to make sure that this current signin isn't duped
+    if 'account' in solana_signin_input:
+        account = solana_signin_input['account']
     else:
         account = None
         # sys.exit('something')
         return True
-    nonce = info['nonce']
+    nonce = solana_signin_input['nonce']
 
     if account in NONCES:
         #fail if nonce already here
