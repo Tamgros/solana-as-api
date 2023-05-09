@@ -2,11 +2,14 @@ from fastapi import FastAPI, Depends, Request, Header, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from nacl.signing import VerifyKey, SignedMessage
 from nacl.exceptions import BadSignatureError
+from solders.pubkey import Pubkey
 from typing import Annotated, List, Optional
 from pydantic import BaseModel
 import uvicorn
 import base64
 import json
+
+import solana 
 
 from src.models.solana_sign_in_input import SolanaSignInInput
 
@@ -19,6 +22,8 @@ dotenv.load_dotenv()
 app = FastAPI()
 
 NONCES = {}
+
+
 
 def check_address_nonce(solana_signin_input):
     # takes in the SolanaSignIn dict and checks to make sure the nonce isn't duped
@@ -49,6 +54,14 @@ class Creds(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+def verify_valid_solana_address(address):
+    try:
+        b_address = bytes(address)
+        Pubkey.from_bytes(b_address)
+        return True 
+    except:
+        return False
 
 
 # def verify_sig(verify_key_bytes, signed):
@@ -173,6 +186,8 @@ def sign_in_with_solana(
 
         #TODO: Some sort of nonce storage to prevent replay
         assert check_address_nonce(sign_in_information), "tx nonce already used"
+
+        assert verify_valid_solana_address(public_key_bytes), "not a valid public key"
 
         return  {
             "signature": message.decode(),
