@@ -6,7 +6,7 @@ class SolanaSignInInput(BaseModel):
     account: Optional[str]
     statement: Optional[str]
     uri: str
-    version: str = "1"
+    version: str = "0.1.0"
     chain: str
     nonce: str
     issuedAt: str
