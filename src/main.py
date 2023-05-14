@@ -17,6 +17,17 @@ import sys
 import os
 import dotenv
 
+from urllib.parse import urlsplit
+
+def is_valid_uri(uri):
+    # does not catch all violations of RFC 3986 but should catch most common cases
+    try:
+        result = urlsplit(uri)
+        return all([result.scheme, result.netloc, result.path])
+    except ValueError:
+        return False
+
+
 dotenv.load_dotenv()
 
 app = FastAPI()
@@ -178,16 +189,54 @@ def sign_in_with_solana(
 
 
         # Run through the expectations of inputs
+        #domain
+        assert (is_valid_uri(sign_in_information['domain'])), "not a proper URI"
         assert sign_in_information['domain'] == os.getenv('RPC_CLIENT'), ""
         if 'account' in sign_in_information:
             assert sign_in_information['account'] == public_key_bytes.decode(), "the public key does not match"
         
+        #address <> account
+        assert verify_valid_solana_address(public_key_bytes), "not a valid public key"
+
+        #statement
+        #TODO hmm, not sure if there is anything to check here for validity uniformly
+        #TODO This statement can be used for the actual chain communication like a hash
+        #TODO so probably add an abstract function here
+
+        #uri
+        assert is_valid_uri(sign_in_information['uri']), "uri does not follow the RFC 3986 format"
+
+        #version
+        assert sign_in_information['version'] == '1', "Needs to be version 1 for this specificaiton"
+
+        #chain
         assert sign_in_information['chain'] == os.getenv('CHAIN_ID'), "chain selection doesn't match"
 
-        #TODO: Some sort of nonce storage to prevent replay
-        assert check_address_nonce(sign_in_information), "tx nonce already used"
+        #nonce
+        assert check_address_nonce(sign_in_information), "tx nonce already used"    
 
-        assert verify_valid_solana_address(public_key_bytes), "not a valid public key"
+        #issuedAt
+        #experiationTime
+        if 'expirationTime' in sign_in_information:
+            assert datetime.fromisoformat(sign_in_information['expirationTime']) > datetime.now(), "the experation time has passed"
+        
+        #notBefore
+        if 'notBefore' in sign_in_information:
+            assert datetime.fromisoformat(sign_in_information['notBefore']) > datetime.now(), "the signed message has been sent before notBefore and thus is not valid yet"
+
+
+        #requestId
+        #TODO maybe add check if this is a recent blockchash?
+        # Sounds like this is a system specific identifier so at most this would be some abstract definition
+
+        #resources
+        assert is_valid_uri(sign_in_information['resources']), "resources isn't a valid URI"
+
+
+   
+
+
+        
 
         return  {
             "signature": message.decode(),
