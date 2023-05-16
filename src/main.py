@@ -222,7 +222,7 @@ def sign_in_with_solana(
         
         #notBefore
         if 'notBefore' in sign_in_information:
-            assert datetime.fromisoformat(sign_in_information['notBefore']) > datetime.now(), "the signed message has been sent before notBefore and thus is not valid yet"
+            assert datetime.fromisoformat(sign_in_information['notBefore']) < datetime.now(), "the signed message has been sent before notBefore and thus is not valid yet"
 
 
         #requestId
