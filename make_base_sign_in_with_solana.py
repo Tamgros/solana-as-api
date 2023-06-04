@@ -102,3 +102,7 @@ message = verify_key.verify(signed_message_bytes, signed_sig_bytes)
 message
 
 verify_key.verify(signed_message_bytes)
+
+
+if '' is not None:
+    print('hello')

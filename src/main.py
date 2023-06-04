@@ -9,6 +9,8 @@ import uvicorn
 import base64
 import json
 
+from datetime import datetime
+
 import solana 
 
 from src.models.solana_sign_in_input import SolanaSignInInput
@@ -23,7 +25,10 @@ def is_valid_uri(uri):
     # does not catch all violations of RFC 3986 but should catch most common cases
     try:
         result = urlsplit(uri)
-        return all([result.scheme, result.netloc, result.path])
+
+        if result.path is None:
+            return False
+        return all([result.scheme, result.netloc])
     except ValueError:
         return False
 
@@ -184,12 +189,13 @@ def sign_in_with_solana(
         print("the dict: ")
 
         message_str = message.decode()
-        print(eval(message_str))
+        print("MESSAGE: " + str(eval(message_str)))
         sign_in_information = eval(message_str)
 
 
         # Run through the expectations of inputs
         #domain
+
         assert (is_valid_uri(sign_in_information['domain'])), "not a proper URI"
         assert sign_in_information['domain'] == os.getenv('RPC_CLIENT'), ""
         if 'account' in sign_in_information:
@@ -230,7 +236,8 @@ def sign_in_with_solana(
         # Sounds like this is a system specific identifier so at most this would be some abstract definition
 
         #resources
-        assert is_valid_uri(sign_in_information['resources']), "resources isn't a valid URI"
+        if "resources" in sign_in_information:
+            assert is_valid_uri(sign_in_information['resources']), "resources isn't a valid URI"
 
 
    
