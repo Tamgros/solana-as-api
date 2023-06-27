@@ -263,6 +263,8 @@ def sign_in_with_solana(
     sig_decode = base64.b64decode(credentials.signed_message)
 
 
+
+
 @app.get("/secure")
 async def secure_route(token: Annotated[str, Depends(verify_signature)]):
     print(token)
@@ -301,6 +303,12 @@ async def poke(credentials: Creds) -> bool:
         return False
 
 
+@app.post("/nfts-owned")
+async def nfts_owned(pk: str) -> List[str]:
+    if not verify_valid_solana_address(pk):
+        raise HTTPException(status_code=400, detail="The public key provided is not valid")
+    
+# https://solscan.io/token/8ABT2yPs6S3yRD2ceceTkhmZo3wqHcLF9mEZExUP8H5y
 
 
 PORT = 3333
