@@ -9,6 +9,14 @@ from nacl.encoding import HexEncoder
 from nacl.signing import SigningKey 
 import base64
 
+import sys
+import os
+from os.path import dirname
+sys.path.append(dirname(os.getcwd() + '/src/models'))
+sys.path.append('/src/models')
+import src.models.solana_sign_in_input
+
+
 from src.models.solana_sign_in_input import SolanaSignInInput
 
 import os
@@ -30,11 +38,25 @@ sign_in_dict = {
     "nonce": "1",
     "issuedAt": str(datetime.now()),
     "expirationTime": str(datetime.now() + timedelta(minutes = 10))
-    # "expirationTime": Optional[str]
+
     # "notBefore": Optional[str]
     # "requestId": Optional[str]
     # "resources": Optional[List[str]]
 }
+
+test = SolanaSignInInput(
+    
+    domain = os.getenv("RPC_CLIENT"),
+    statement = "Attack at Dawn",
+    uri = os.getenv('API_ENDPOINT'),
+    version = "1",
+    chain = os.getenv("CHAIN_ID"),
+    nonce = "1",
+    issuedAt = str(datetime.now()),
+    expirationTime = str(datetime.now() + timedelta(minutes = 10))
+    
+)
+
 
 sign_in_with_solana_format = SolanaSignInInput(
     **sign_in_dict
