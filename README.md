@@ -38,6 +38,7 @@ https://developer.token.io/seasons_rest_api_doc/content/e-rest/jwt_auth.htm
 Next steps, TODOs:
 * Sign in with Solana
     * https://github.com/solana-labs/wallet-standard/pull/12
+    * ref https://eips.ethereum.org/EIPS/eip-4361
 * JWT type format
 * token gating flow
     * Some tokens represent different rate limits. How do you queue if there is ever a capacity reached?

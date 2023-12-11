@@ -25,7 +25,7 @@ sign_in_dict = {
     # "account": Optional[str]
     "statement": "Attack at Dawn",
     "uri": os.getenv('API_ENDPOINT'),
-    # "version": str = "1"
+    "version": "1",
     "chain": os.getenv("CHAIN_ID"),
     "nonce": "1",
     "issuedAt": str(datetime.now()),
