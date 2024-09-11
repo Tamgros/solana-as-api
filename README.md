@@ -1,6 +1,6 @@
 # solana-as-api
 
-This repo provides references for a few simple flows
+This repo provides references for a few simple flows. The goal is to simplify accessing and paying for APIs. Instead of a business having to issue a bunch of API keys and find the perfect pricing model, they can chose a simplified flow with price discovery on chain.
 
 1. Body signature
     1. Sign a message with your solana keys client side 
